@@ -2,32 +2,9 @@ import { Layout } from "@/components/Layout";
 import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, CalendarDays, CheckCircle, Loader2 } from "lucide-react";
 
-// ─── GOOGLE SHEETS CONFIG ───────────────────────────────────────────────────
-// 1. Open your Google Sheet
-// 2. Extensions → Apps Script → paste the script from GOOGLE_SCRIPT_SETUP below
-// 3. Deploy → New deployment → Web App → Anyone can access → Deploy
-// 4. Copy the Web App URL and paste it below (or set VITE_GOOGLE_SHEET_URL in .env)
 const GOOGLE_SHEET_URL =
-  import.meta.env.VITE_GOOGLE_SHEET_URL || "";
-
-/*
-─── GOOGLE APPS SCRIPT TO PASTE ────────────────────────────────────────────
-function doPost(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const data = JSON.parse(e.postData.contents);
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["Timestamp", "Name", "Email", "Phone", "Concern", "Preferred Date", "Message"]);
-  }
-  sheet.appendRow([
-    new Date().toLocaleString(),
-    data.name, data.email, data.phone,
-    data.condition, data.preferredDate, data.message
-  ]);
-  return ContentService.createTextOutput(JSON.stringify({ result: "success" }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-────────────────────────────────────────────────────────────────────────────
-*/
+  import.meta.env.VITE_GOOGLE_SHEET_URL ||
+  "https://script.google.com/macros/s/AKfycbzTLEzt8Isngldw4gjNaGI7lgyu9xWGc4Ocu6-2bRbFzl33g5VjL0jSv05f7qxyPw3dyQ/exec";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -53,31 +30,14 @@ export default function Contact() {
     setStatus("loading");
 
     try {
-      if (!GOOGLE_SHEET_URL) {
-        // No URL configured — simulate success in dev
-        console.log("Form data (no sheet URL configured):", formData);
-        await new Promise((r) => setTimeout(r, 800));
-        setStatus("success");
-      } else {
-        await fetch(GOOGLE_SHEET_URL, {
-          method: "POST",
-          mode: "no-cors", // Google Apps Script requires no-cors
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-        // no-cors means we can't read the response — assume success if no throw
-        setStatus("success");
-      }
-
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        condition: "",
-        preferredDate: "",
-        message: "",
+      await fetch(GOOGLE_SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-
+      setStatus("success");
+      setFormData({ name: "", email: "", phone: "", condition: "", preferredDate: "", message: "" });
       setTimeout(() => setStatus("idle"), 6000);
     } catch (err) {
       console.error("Form submission error:", err);
@@ -163,7 +123,6 @@ export default function Contact() {
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit} className="bg-gray-50 p-8 rounded-xl">
 
-                {/* Success */}
                 {status === "success" && (
                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -173,7 +132,6 @@ export default function Contact() {
                   </div>
                 )}
 
-                {/* Error */}
                 {status === "error" && (
                   <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                     <p className="text-red-800 font-semibold">
@@ -182,7 +140,6 @@ export default function Contact() {
                   </div>
                 )}
 
-                {/* Name */}
                 <div className="mb-6">
                   <label className="block text-sm font-semibold text-primary mb-2">Full Name *</label>
                   <input
@@ -197,7 +154,6 @@ export default function Contact() {
                   />
                 </div>
 
-                {/* Email + Phone row */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                   <div>
                     <label className="block text-sm font-semibold text-primary mb-2">Email Address *</label>
@@ -227,7 +183,6 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Condition + Date row */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                   <div>
                     <label className="block text-sm font-semibold text-primary mb-2">Primary Concern *</label>
@@ -261,7 +216,6 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Message */}
                 <div className="mb-6">
                   <label className="block text-sm font-semibold text-primary mb-2">
                     Additional Message (Optional)
@@ -316,7 +270,7 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Map Section */}
+      {/* Map Section — Altius Hospital, HBR Layout, Bangalore */}
       <section className="section-padding bg-white">
         <div className="container-max">
           <h2 className="text-center mb-8">Visit Us</h2>
@@ -325,11 +279,22 @@ export default function Contact() {
               width="100%"
               height="100%"
               frameBorder="0"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.2749819088247!2d77.6097213762346!3d13.0789305871639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae18df8b4db4b7%3A0x8b4b4b4b4b4b4b4b!2sAltius%20Hospital%20HBR!5e0!3m2!1sen!2sin!4v1708607895263"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.0185706671273!2d77.62660041142576!3d13.034489313441748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae175a83f3f40d%3A0xa1e557900cd7b67c!2sAltius%20Multi-speciality%20Hospital%2C%20HBR%20Layout!5e0!3m2!1sen!2sin!4v1771857450345!5m2!1sen!2sin"
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+          </div>
+          <div className="text-center mt-4">
+            <a
+              href="https://maps.app.goo.gl/B6csSdqyacrhLHkP7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-accent hover:underline font-semibold"
+            >
+              <MapPin className="w-4 h-4" />
+              Open in Google Maps
+            </a>
           </div>
         </div>
       </section>
