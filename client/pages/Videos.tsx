@@ -1,8 +1,52 @@
 import { Layout } from "@/components/Layout";
 import { useState } from "react";
-import { Play } from "lucide-react";
+import { Play, Instagram } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VideoModal } from "@/components/VideoModal";
+
+// Category gradient fallbacks for when Instagram CDN thumbnails fail
+const categoryGradients: Record<string, string> = {
+  diabetes: "from-blue-600 to-blue-400",
+  respiratory: "from-teal-600 to-teal-400",
+  lifestyle: "from-green-600 to-green-400",
+  "health-tips": "from-orange-500 to-amber-400",
+  media: "from-purple-600 to-purple-400",
+  all: "from-primary to-primary/70",
+};
+
+function VideoThumbnail({
+  src,
+  alt,
+  category,
+}: {
+  src: string;
+  alt: string;
+  category: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  const gradient = categoryGradients[category] || categoryGradients.all;
+
+  if (failed || !src) {
+    return (
+      <div
+        className={`w-full h-full bg-gradient-to-br ${gradient} flex flex-col items-center justify-center gap-2`}
+      >
+        <Instagram className="w-10 h-10 text-white/80" />
+        <span className="text-white/70 text-xs font-medium">Instagram Reel</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+      onError={() => setFailed(true)}
+      crossOrigin="anonymous"
+    />
+  );
+}
 
 export default function Videos() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -26,8 +70,7 @@ export default function Videos() {
       title: "Diabetes Management Tips",
       category: "diabetes",
       url: "https://www.instagram.com/reel/DVAbDs0CRsz/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "2.5K",
     },
     {
@@ -35,8 +78,7 @@ export default function Videos() {
       title: "Respiratory Health in Monsoons",
       category: "respiratory",
       url: "https://www.instagram.com/reel/DUkiQLrEjOG/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "1.8K",
     },
     {
@@ -44,8 +86,7 @@ export default function Videos() {
       title: "Lifestyle Changes for Better Health",
       category: "lifestyle",
       url: "https://www.instagram.com/reel/DSjdSVOkUcM/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "3.2K",
     },
     {
@@ -53,8 +94,7 @@ export default function Videos() {
       title: "Asthma Management Guide",
       category: "health-tips",
       url: "https://www.instagram.com/reel/DSZwnNAEtHN/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "2.1K",
     },
     {
@@ -62,8 +102,7 @@ export default function Videos() {
       title: "Media Interview - Health Talk",
       category: "media",
       url: "https://www.instagram.com/reel/DR4VCpvkvUw/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "4.5K",
     },
     {
@@ -71,8 +110,7 @@ export default function Videos() {
       title: "Preventive Healthcare Tips",
       category: "health-tips",
       url: "https://www.instagram.com/reel/DQJkpikEfDC/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "2.9K",
     },
     {
@@ -80,8 +118,7 @@ export default function Videos() {
       title: "Diabetes Prevention Programs",
       category: "diabetes",
       url: "https://www.instagram.com/reel/DM9wI_XJ-A-/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "3.4K",
     },
     {
@@ -89,8 +126,7 @@ export default function Videos() {
       title: "Respiratory Care During Viral Season",
       category: "respiratory",
       url: "https://www.instagram.com/reel/DMziY45RBcp/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "2.7K",
     },
     {
@@ -98,15 +134,15 @@ export default function Videos() {
       title: "Healthy Lifestyle Q&A",
       category: "lifestyle",
       url: "https://www.instagram.com/reel/DMkoRzEyNrz/",
-      thumbnail:
-        "https://scontent.cdninstagram.com/v/t51.29350-15/424892389_371987435468866_2847862827520152652_n.jpg?stp=dst-jpg_e15_fr_s720x720&efg=eyJ2ZW5jb2RlZF9qcGciOiJ7InZhbHVlIjoiMSJ9LCJ3ZWJwX3RyYW5zZm9ybSI6eyJ2YWx1ZSI6IjEifX0&_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=6g_8wDXRD1kQ7kNvgGK2gIk&_nc_gid=0&oh=00_AYByEE3FQGTb8zNk9u8t8w&oe=67C0FEF8",
+      thumbnail: "",
       views: "1.9K",
     },
   ];
 
-  const filteredVideos = activeCategory === "all"
-    ? videos
-    : videos.filter((v) => v.category === activeCategory);
+  const filteredVideos =
+    activeCategory === "all"
+      ? videos
+      : videos.filter((v) => v.category === activeCategory);
 
   return (
     <Layout>
@@ -156,10 +192,10 @@ export default function Videos() {
               >
                 <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   <div className="relative overflow-hidden bg-gray-200 aspect-video">
-                    <img
+                    <VideoThumbnail
                       src={video.thumbnail}
                       alt={video.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      category={video.category}
                     />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
                       <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center group-hover:bg-accent group-hover:scale-110 transition-all duration-300 shadow-lg">
@@ -173,10 +209,10 @@ export default function Videos() {
                     </h3>
                     <div className="flex items-center justify-between">
                       <span className="bg-accent/10 text-accent px-3 py-1 rounded-full text-xs font-semibold">
-                        {categories.find(c => c.id === video.category)?.label}
+                        {categories.find((c) => c.id === video.category)?.label}
                       </span>
-                      <span className="text-xs text-muted-foreground">
-                        {video.views} views
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Instagram className="w-3 h-3" /> {video.views} views
                       </span>
                     </div>
                   </div>
@@ -208,9 +244,10 @@ export default function Videos() {
             href="https://instagram.com/your_lifestyle_doctor"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-accent text-accent-foreground hover:opacity-90 px-8 py-4 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl animate-slide-up"
+            className="inline-flex items-center gap-2 bg-accent text-accent-foreground hover:opacity-90 px-8 py-4 rounded-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl animate-slide-up"
           >
-            Follow @your_lifestyle_doctor on Instagram
+            <Instagram className="w-5 h-5" />
+            Follow @your_lifestyle_doctor
           </a>
         </div>
       </section>
