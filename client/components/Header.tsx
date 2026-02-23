@@ -20,14 +20,19 @@ export const Header = () => {
   return (
     <header className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-md">
       <div className="container-max">
-        <div className="flex justify-between items-center py-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-              <span className="font-bold text-primary text-lg">DR</span>
+        <div className="flex justify-between items-center py-3">
+          <Link to="/" className="flex items-center gap-3">
+            {/* Altius Hospitals Logo */}
+            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm overflow-hidden p-1">
+              <img
+                src="/altius-logo.png"
+                alt="Altius Hospitals"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold">Dr. Darshana</h1>
-              <p className="text-xs opacity-90">Internal Medicine</p>
+              <h1 className="text-lg font-bold leading-tight">Dr. Darshana</h1>
+              <p className="text-xs opacity-90">Altius Hospitals · Internal Medicine</p>
             </div>
           </Link>
 
